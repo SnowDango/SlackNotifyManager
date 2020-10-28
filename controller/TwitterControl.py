@@ -7,7 +7,7 @@ from pytz import timezone
 class TwitterControl:
 
     def __init__(self):
-        self.keys = json.load(open('', 'r'))
+        self.keys = json.load(open('/Users/ochiaiyuuki/PycharmProjects/SlackNotifyMnager/controller/key.json', 'r'))
         auth = tweepy.OAuthHandler(self.keys["api"], self.keys["api-secret"])
         auth.set_access_token(self.keys["token"], self.keys["token-secret"])
         self.api = tweepy.API(auth)
@@ -21,7 +21,7 @@ class TwitterControl:
             now_delta = now + datetime.timedelta(seconds=-15)
             if created_at > now_delta:
                 new_tweets.append(
-                    'https://twitter.com/{0}/status/{1}'.format(tweet._json["user"]['screen_name'], tweet._json["id_str"])
+                    'https://twitter.com/{0}/status/{1}/'.format(tweet._json["user"]['screen_name'], tweet._json["id_str"])
                 )
         print('tweet scan : {}'.format(new_tweets))
         return new_tweets
