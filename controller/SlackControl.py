@@ -5,7 +5,7 @@ import json
 class SlackControl:
 
     def __init__(self):
-        keys = json.load(open('/Users/ochiaiyuuki/PycharmProjects/SlackNotifyMnager/controller/key.json', 'r'))
+        keys = json.load(open('key.json', 'r'))
         self.OTHER_WEB_HOOK_URL = keys["other_webhook"]
         self.IDOL_WEB_HOOK_URL = keys["idol_webhook"]
 
