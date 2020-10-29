@@ -1,8 +1,10 @@
 # import
+import datetime
 import threading
 import time
 from controller import SlackControl, MailControl, TwitterControl
 
+last_date = datetime.datetime.now()
 
 def mailJob():
     mail = MailControl.MailControl()
