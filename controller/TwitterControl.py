@@ -1,5 +1,5 @@
-
-
+import sys
+sys.path.append("")
 import tweepy
 import json
 import datetime
@@ -11,37 +11,32 @@ last_date = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
 class TwitterControl:
 
     def __init__(self):
-        self.keys = json.load(open('/home/pi/Documents/key.json', 'r'))
-        auth = tweepy.OAuthHandler(self.keys["api"], self.keys["api-secret"])
-        auth.set_access_token(self.keys["token"], self.keys["token-secret"])
+        keys = json.load(open('api_key.json', 'r'))
+        self.twitter_key = keys["twitter"]
+        auth = tweepy.OAuthHandler(self.twitter_key["api"], self.twitter_key["api-secret"])
+        auth.set_access_token(self.twitter_key["token"], self.twitter_key["token-secret"])
         self.api = tweepy.API(auth)
 
     def getTweetList(self):
         global last_date
         new_tweets = []
-        new_tweets2 = []
-        tweets = self.api.list_timeline(list_id=self.keys["list_id"])
-        tweets2 = self.api.list_timeline(list_id=self.keys["list_id2"])
         now_date = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
-        for tweet in tweets:
-            created_at = self.changeStrtoTime(tweet._json['created_at'])
-            if created_at > last_date:
-                new_tweets.append(
-                    'https://twitter.com/{0}/status/{1}/'.format(tweet._json["user"]['screen_name'],
-                                                                 tweet._json["id_str"])
-                )
-        for tweet in tweets2:
-            created_at = self.changeStrtoTime(tweet._json['created_at'])
-            if created_at > last_date:
-                new_tweets2.append(
-                    'https://twitter.com/{0}/status/{1}/'.format(tweet._json["user"]['screen_name'],
-                                                                 tweet._json["id_str"])
-                )
-        print('tweet scan : {}'.format(new_tweets))
+        for num in range(len(self.twitter_key["list_id"])):
+            tweets = self.api.list_timeline(list_id=self.twitter_key["list_id"][num])
+            list_tweet = []
+            for tweet in tweets:
+                created_at = self.changeStrToTime(tweet._json['created_at'])
+                if created_at > last_date:
+                    list_tweet.append(
+                        'https://twitter.com/{0}/status/{1}/'.format(tweet._json["user"]['screen_name'],
+                                                                     tweet._json["id_str"])
+                    )
+            new_tweets.append(list_tweet)
+            print("listId = {0}, newTweets = {1}".format(self.twitter_key["list_id"][num], new_tweets[num]))
         last_date = now_date
-        return new_tweets, new_tweets2
+        return new_tweets
 
-    def changeStrtoTime(self, str):
+    def changeStrToTime(self, str):
         time_data = datetime.datetime.strptime(str, '%a %b %d %H:%M:%S %z %Y')
         time_data.astimezone(timezone('Asia/Tokyo'))
         return time_data

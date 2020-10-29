@@ -5,21 +5,21 @@ import json
 class SlackControl:
 
     def __init__(self):
-        keys = json.load(open('/home/pi/Documents/key.json', 'r'))
-        self.OTHER_WEB_HOOK_URL = keys["other_webhook"]
-        self.IDOL_WEB_HOOK_URL = keys["idol_webhook"]
-        self.VOICE_WEB_HOOK_URL = keys["voice_webhook"]
+        keys = json.load(open('api_key.json', 'r'))
+        self.mail_webhook = keys['mail']['mail-channel']
+        self.twitter_webhook = keys["slack"]["twitter-channel"]
 
-    def sendSlackMail(self, bodys):
-        for body in bodys:
-            requests.post(self.OTHER_WEB_HOOK_URL, data=json.dumps({
-                'text': '```{}```'.format(body)
-            }))
+    def sendSlackMail(self, mails):
+        for num in range(len(mails)):
+            for mail in mails[num]:
+                requests.post(self.mail_webhook[num], data=json.dumps({'text': '```{}```'.format(mail)}))
 
-    def sendSlackTweet(self, tweets):
-        for tweet in tweets:
-            requests.post(self.IDOL_WEB_HOOK_URL, data=json.dumps({'text': tweet, "unfurl_links": True}))
+    def sendSlackTweet(self, tweets_list):
+        for num in range(len(tweets_list)):
+            if tweets_list[num] is not None:
+                for tweet in tweets_list[num]:
+                    requests.post(self.twitter_webhook[num], data=json.dumps({'text': tweet, "unfurl_link": True}))
+            else:
+                continue
 
-    def sendSlackTweetVoice(self, tweets):
-        for tweet in tweets:
-            requests.post(self.VOICE_WEB_HOOK_URL, data=json.dumps({'text': tweet, "unfurl_links": True}))
+

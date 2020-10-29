@@ -6,31 +6,19 @@ from controller import SlackControl, MailControl, TwitterControl
 
 
 def mailJob():
-    mail = MailControl.MailControl()
-    mail.login()
-    result, data_id = mail.getNewMailList()
-    bodys = mail.getMailData(data_id)
-    mail.logout()
-    if not bodys:
-        return
-    else:
+    gmail = MailControl.MailControl()
+    mails = gmail.unreadMailList()
+    if mails is not None:
         slack = SlackControl.SlackControl()
-        slack.sendSlackMail(bodys)
+        slack.sendSlackMail(mails)
 
 
 def tweetJob():
     twitter = TwitterControl.TwitterControl()
-    tweet_list, tweet_list2 = twitter.getTweetList()
-    if not tweet_list:
-        return
-    else:
+    tweet_list = twitter.getTweetList()
+    if tweet_list is not None:
         slack = SlackControl.SlackControl()
         slack.sendSlackTweet(tweet_list)
-    if not tweet_list2:
-        return
-    else:
-        slack = SlackControl.SlackControl()
-        slack.sendSlackTweet(tweet_list2)
 
 
 if __name__ == '__main__':
