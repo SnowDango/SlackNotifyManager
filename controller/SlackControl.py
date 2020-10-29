@@ -5,9 +5,10 @@ import json
 class SlackControl:
 
     def __init__(self):
-        keys = json.load(open('key.json', 'r'))
+        keys = json.load(open('/home/pi/Documents/key.json', 'r'))
         self.OTHER_WEB_HOOK_URL = keys["other_webhook"]
         self.IDOL_WEB_HOOK_URL = keys["idol_webhook"]
+        self.VOICE_WEB_HOOK_URL = keys["voice_webhook"]
 
     def sendSlackMail(self, bodys):
         for body in bodys:
@@ -19,3 +20,6 @@ class SlackControl:
         for tweet in tweets:
             requests.post(self.IDOL_WEB_HOOK_URL, data=json.dumps({'text': tweet, "unfurl_links": True}))
 
+    def sendSlackTweetVoice(self, tweets):
+        for tweet in tweets:
+            requests.post(self.VOICE_WEB_HOOK_URL, data=json.dumps({'text': tweet, "unfurl_links": True}))

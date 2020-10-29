@@ -11,7 +11,7 @@ class MailControl:
 
     def __init__(self):
         self.imap = imaplib.IMAP4_SSL("imap.gmail.com", '993')
-        self.keys = json.load(open('key.json', 'r'))
+        self.keys = json.load(open('/home/pi/Documents/key.json', 'r'))
         self.UserName = self.keys["user_name"]
         self.PassWord = self.keys["pass"]
 

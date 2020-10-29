@@ -20,12 +20,17 @@ def mailJob():
 
 def tweetJob():
     twitter = TwitterControl.TwitterControl()
-    tweet_list = twitter.getTweetList()
+    tweet_list, tweet_list2 = twitter.getTweetList()
     if not tweet_list:
         return
     else:
         slack = SlackControl.SlackControl()
         slack.sendSlackTweet(tweet_list)
+    if not tweet_list2:
+        return
+    else:
+        slack = SlackControl.SlackControl()
+        slack.sendSlackTweet(tweet_list2)
 
 
 if __name__ == '__main__':
