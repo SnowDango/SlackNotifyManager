@@ -5,7 +5,7 @@ import json
 class SlackControl:
 
     def __init__(self):
-        keys = json.load(open('api_key.json', 'r'))
+        keys = json.load(open('./api_key.json', 'r'))
         self.mail_webhook = keys['mail']['mail-channel']
         self.twitter_webhook = keys["slack"]["twitter-channel"]
 

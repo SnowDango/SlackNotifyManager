@@ -5,7 +5,7 @@ import requests
 class MailTargetModel:
 
     def __init__(self):
-        keys = json.load(open('api.json', 'r'))
+        keys = json.load(open('./api.json', 'r'))
         self.api = keys["api"]
 
     def getTarget(self):

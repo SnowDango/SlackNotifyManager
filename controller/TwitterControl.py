@@ -11,7 +11,7 @@ last_date = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
 class TwitterControl:
 
     def __init__(self):
-        keys = json.load(open('api_key.json', 'r'))
+        keys = json.load(open('./api_key.json', 'r'))
         self.twitter_key = keys["twitter"]
         auth = tweepy.OAuthHandler(self.twitter_key["api"], self.twitter_key["api-secret"])
         auth.set_access_token(self.twitter_key["token"], self.twitter_key["token-secret"])
