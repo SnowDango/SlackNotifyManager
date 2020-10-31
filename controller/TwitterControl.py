@@ -1,9 +1,9 @@
-import sys
-sys.path.append("")
 import tweepy
 import json
 import datetime
 from pytz import timezone
+
+from utility import ErrorLogger
 
 last_date = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
 
@@ -21,20 +21,25 @@ class TwitterControl:
         global last_date
         new_tweets = []
         now_date = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
-        for num in range(len(self.twitter_key["list_id"])):
-            tweets = self.api.list_timeline(list_id=self.twitter_key["list_id"][num])
-            list_tweet = []
-            for tweet in tweets:
-                created_at = self.changeStrToTime(tweet._json['created_at'])
-                if created_at > last_date:
-                    list_tweet.append(
-                        'https://twitter.com/{0}/status/{1}/'.format(tweet._json["user"]['screen_name'],
+        try:
+            for num in range(len(self.twitter_key["list_id"])):
+                tweets = self.api.list_timeline(list_id=self.twitter_key["list_id"][num])
+                list_tweet = []
+                for tweet in tweets:
+                    created_at = self.changeStrToTime(tweet._json['created_at'])
+                    if created_at > last_date:
+                        list_tweet.append(
+                            'https://twitter.com/{0}/status/{1}/'.format(tweet._json["user"]['screen_name'],
                                                                      tweet._json["id_str"])
-                    )
-            new_tweets.append(list_tweet)
-            print("listId = {0}, newTweets = {1}".format(self.twitter_key["list_id"][num], new_tweets[num]))
-        last_date = now_date
-        return new_tweets
+                        )
+                new_tweets.append(list_tweet)
+                print("listId = {0}, newTweets = {1}".format(self.twitter_key["list_id"][num], new_tweets[num]))
+                last_date = now_date
+            return new_tweets
+        except Exception as e:
+            ErrorLogger.logger(now_date, e)
+            data = {"syumi": [], "syukatu": [], "baito": []}
+            return data
 
     def changeStrToTime(self, str):
         time_data = datetime.datetime.strptime(str, '%a %b %d %H:%M:%S %z %Y')

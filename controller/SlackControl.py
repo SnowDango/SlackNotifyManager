@@ -1,5 +1,8 @@
 import requests
 import json
+import datetime
+from pytz import timezone
+from utility import ErrorLogger
 
 
 class SlackControl:
@@ -10,16 +13,23 @@ class SlackControl:
         self.twitter_webhook = keys["slack"]["twitter-channel"]
 
     def sendSlackMail(self, mails):
-        for num in range(len(mails)):
-            for mail in mails[num]:
-                requests.post(self.mail_webhook[num], data=json.dumps({'text': '```{}```'.format(mail)}))
+        try:
+            for num in range(len(mails)):
+                for mail in mails[num]:
+                    requests.post(self.mail_webhook[num], data=json.dumps({'text': '```{}```'.format(mail)}))
+        except Exception as e:
+            ErrorLogger.logger(datetime.datetime.now().astimezone(timezone('Asia/Tokyo')), e)
 
     def sendSlackTweet(self, tweets_list):
-        for num in range(len(tweets_list)):
-            if tweets_list[num] is not None:
-                for tweet in tweets_list[num]:
-                    requests.post(self.twitter_webhook[num], data=json.dumps({'text': tweet, "unfurl_link": True}))
-            else:
-                continue
+        try:
+            for num in range(len(tweets_list)):
+                if tweets_list[num] is not None:
+                    for tweet in tweets_list[num]:
+                        requests.post(self.twitter_webhook[num], data=json.dumps({'text': tweet, "unfurl_link": True}))
+                else:
+                    continue
+        except Exception as e:
+            ErrorLogger.logger(datetime.datetime.now().astimezone(timezone('Asia/Tokyo')), e)
+
 
 

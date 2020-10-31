@@ -1,5 +1,8 @@
 from simplegmail import Gmail
+import datetime
+from pytz import timezone
 from targetmodel import MailTargetModel
+from utility import ErrorLogger
 
 
 class MailControl:
@@ -25,6 +28,7 @@ class MailControl:
                     to, from_, date, subject, body
                 ))
             except Exception as e:
+                ErrorLogger.logger(datetime.datetime.now().astimezone(timezone('Asia/Tokyo')), e)
                 body = "can't decode mail"
                 unreadMails[num].append("to: {0}\nfrom: {1}\ndate: {2}\nsubject: {3}\n{4}".format(
                     to, from_, date, subject, body
@@ -34,12 +38,15 @@ class MailControl:
         return unreadMails
 
     def isTarget(self, from_, target_address):
-        num = 0
-        if target_address["syukatu"].count(from_) != 0:
-            num = 1
-        elif target_address["syumi"].count(from_) != 0:
-            num = 2
-        elif target_address["baito"].count(from_) != 0:
-            num = 3
-        return num
+        try:
+            num = 0
+            if target_address["syukatu"].count(from_) != 0:
+                num = 1
+            elif target_address["syumi"].count(from_) != 0:
+                num = 2
+            elif target_address["baito"].count(from_) != 0:
+                num = 3
+            return num
+        except Exception as e:
+            ErrorLogger.logger(datetime.datetime.now().astimezone(timezone('Asia/Tokyo')), e)
 
