@@ -11,7 +11,7 @@ last_date = datetime.datetime.now().astimezone(timezone('Asia/Tokyo'))
 class TwitterControl:
 
     def __init__(self):
-        keys = json.load(open('./api_key.json', 'r'))
+        keys = json.load(open('.env/api_key.json', 'r'))
         self.twitter_key = keys["twitter"]
         auth = tweepy.OAuthHandler(self.twitter_key["api"], self.twitter_key["api-secret"])
         auth.set_access_token(self.twitter_key["token"], self.twitter_key["token-secret"])
@@ -41,7 +41,7 @@ class TwitterControl:
             data = {"syumi": [], "syukatu": [], "baito": []}
             return data
 
-    def changeStrToTime(self, str):
-        time_data = datetime.datetime.strptime(str, '%a %b %d %H:%M:%S %z %Y')
+    def changeStrToTime(self, date_str):
+        time_data = datetime.datetime.strptime(date_str, '%a %b %d %H:%M:%S %z %Y')
         time_data.astimezone(timezone('Asia/Tokyo'))
         return time_data

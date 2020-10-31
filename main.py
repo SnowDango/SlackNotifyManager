@@ -1,5 +1,4 @@
 # import
-import datetime
 import threading
 import time
 from controller import SlackControl, MailControl, TwitterControl

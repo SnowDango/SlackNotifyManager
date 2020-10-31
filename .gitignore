@@ -1,6 +1,6 @@
 # Project exclude paths
 /venv/
-./api.json
-./api_key.json
-./client_secret.json
-./gmail_token.json
+.env/api.json
+.env/api_key.json
+.env/client_secret.json
+.env/gmail_token.json
