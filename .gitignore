@@ -3,4 +3,4 @@
 .env/api.json
 .env/api_key.json
 .env/client_secret.json
-.env/gmail_token.json
+gmail_token.json

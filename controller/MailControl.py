@@ -8,7 +8,7 @@ from utility import ErrorLogger
 class MailControl:
 
     def __init__(self):
-        self.gmail = Gmail()
+        self.gmail = Gmail('.env/client_secret.json')
 
     def unreadMailList(self):
         unreadMails = {0: [], 1: [], 2: [], 3: []}
@@ -16,7 +16,6 @@ class MailControl:
         target_address = target.getTarget()
         try:
             messages = self.gmail.get_unread_inbox()
-            ErrorLogger.logger(datetime.datetime.now().astimezone(timezone('Asia/Tokyo')), e)
             for message in messages:
                 message.mark_as_read()
                 to = message.recipient
